@@ -12,3 +12,6 @@ const publicFolderPath = join(process.cwd(), "./public/img")
 
 export const getMovies = () => readJSON(moviesJSONPath)
 export const writeMovies = () => writeJSON(moviesJSONPath)
+
+export const getMoviesJsonReadableStream = () => createReadStream(moviesJSONPath)
+export const getPDFWriteableStream = (filename) => createWriteStream(join(dataFolderPath, filename))

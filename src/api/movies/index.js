@@ -1,7 +1,7 @@
 import express from "express"
 import httpErrors from "http-errors"
 import uniqid from "uniqid"
-import { getMovies, writeMovies } from "../../lib/fs-tools.js"
+import { getMovies, getMoviesJsonReadableStream, writeMovies } from "../../lib/fs-tools.js"
 
 const moviesRouter = express.Router()
 
@@ -105,6 +105,20 @@ moviesRouter.delete("/:movieId", async (req, res, next) => {
     } else {
       next(BadRequest(`Movie with id ${req.params.movieId} not deleted!`))
     }
+  } catch (error) {
+    next(error)
+  }
+})
+
+moviesRouter.get("/:movieId/pdf", async (req, res, next) => {
+  try {
+    const source = await getMoviesJsonReadableStream()
+    res.setHeader("Content-Disposition", "attachment; filename=blogscsv.csv")
+    const transform = new json2csv.Transform({ fields: ["Title", "Year"] })
+    const destination = res
+    pipeline(source, transform, destination, (err) => {
+      if (err) console.log(err)
+    })
   } catch (error) {
     next(error)
   }
