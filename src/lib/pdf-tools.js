@@ -11,14 +11,14 @@ export const getPDFReadableStream = (movie) => {
 
   const docDefinition = {
     content: [
-      { text: "blogs", style: "header" },
+      { text: movie.Title, style: "header" },
       //   blogsArray.map((blog) => {
       // return [
+      // {
+      //   text: movie.Title
+      // },
       {
-        text: movie.Title
-      },
-      {
-        text: movie.Year
+        text: `Year released: ${movie.Year}`
       }
       // ]
       //   })

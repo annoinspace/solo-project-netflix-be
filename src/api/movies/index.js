@@ -1,7 +1,9 @@
 import express from "express"
 import httpErrors from "http-errors"
 import uniqid from "uniqid"
+import { pipeline } from "stream"
 import { getMovies, getMoviesJsonReadableStream, writeMovies } from "../../lib/fs-tools.js"
+import { getPDFReadableStream } from "../../lib/pdf-tools.js"
 
 const moviesRouter = express.Router()
 
@@ -111,17 +113,28 @@ moviesRouter.delete("/:movieId", async (req, res, next) => {
 })
 
 moviesRouter.get("/:movieId/pdf", async (req, res, next) => {
-  try {
-    const source = await getMoviesJsonReadableStream()
-    res.setHeader("Content-Disposition", "attachment; filename=blogscsv.csv")
-    const transform = new json2csv.Transform({ fields: ["Title", "Year"] })
-    const destination = res
-    pipeline(source, transform, destination, (err) => {
-      if (err) console.log(err)
-    })
-  } catch (error) {
-    next(error)
-  }
+  // try {
+  //     const moviesArray = await getMovies()
+  //     console.log(req.params.movieId)
+  //     const movie = moviesArray.find((movie) => movie.imdbID === req.params.movieId)
+  //     if (movie) {
+  //       res.status(200).send(movie)
+  //     } else {
+  //       next(NotFound(`Unfortunately the movie with id:${req.params.movieId} was not found!`))
+  //     }
+  //   } catch (error) {
+  //     console.log("----error loading movies-----")
+  //     next(error)
+  //   }
+  const moviesArray = await getMovies()
+  const movie = moviesArray.find((movie) => movie.imdbID === req.params.movieId)
+  res.setHeader("Content-Disposition", `attachment; filename=${req.params.movieId}.pdf`)
+  const source = getPDFReadableStream(movie)
+  const destination = res
+
+  pipeline(source, destination, (err) => {
+    if (err) console.log(err)
+  })
 })
 
 export default moviesRouter
