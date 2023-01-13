@@ -17,6 +17,21 @@ const moviesRouter = express.Router()
 //     next(error)
 //   }
 // })
+moviesRouter.get("/:movieId/pdf", async (req, res, next) => {
+  try {
+    const moviesArray = await getMovies()
+    const movie = moviesArray.find((movie) => movie.imdbID === req.params.movieId)
+    res.setHeader("Content-Disposition", `attachment; filename=${req.params.movieId}.pdf`)
+    const source = getPDFReadableStream(movie)
+    const destination = res
+    console.log("pdf created")
+    pipeline(source, destination, (err) => {
+      if (err) console.log(err)
+    })
+  } catch (error) {
+    next(error)
+  }
+})
 
 // single movie
 moviesRouter.get("/:movieId", async (req, res, next) => {
@@ -43,10 +58,6 @@ moviesRouter.get("/", async (req, res, next) => {
     const moviesFromSearch = await moviesArray.filter((movie) =>
       movie.Title.toLowerCase().includes(req.query.title.toLowerCase())
     )
-    // let moviesFromSearch = await moviesArray.findAll({ Title: title }).exec()
-    // let moviesFromSearch = await moviesArray.findAll((movie) => {
-    //   return movie.Title === title
-    // })
 
     if (moviesFromSearch) {
       res.status(200).send(moviesFromSearch)
@@ -110,31 +121,6 @@ moviesRouter.delete("/:movieId", async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-})
-
-moviesRouter.get("/:movieId/pdf", async (req, res, next) => {
-  // try {
-  //     const moviesArray = await getMovies()
-  //     console.log(req.params.movieId)
-  //     const movie = moviesArray.find((movie) => movie.imdbID === req.params.movieId)
-  //     if (movie) {
-  //       res.status(200).send(movie)
-  //     } else {
-  //       next(NotFound(`Unfortunately the movie with id:${req.params.movieId} was not found!`))
-  //     }
-  //   } catch (error) {
-  //     console.log("----error loading movies-----")
-  //     next(error)
-  //   }
-  const moviesArray = await getMovies()
-  const movie = moviesArray.find((movie) => movie.imdbID === req.params.movieId)
-  res.setHeader("Content-Disposition", `attachment; filename=${req.params.movieId}.pdf`)
-  const source = getPDFReadableStream(movie)
-  const destination = res
-
-  pipeline(source, destination, (err) => {
-    if (err) console.log(err)
-  })
 })
 
 export default moviesRouter

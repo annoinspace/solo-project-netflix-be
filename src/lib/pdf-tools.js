@@ -12,16 +12,10 @@ export const getPDFReadableStream = (movie) => {
   const docDefinition = {
     content: [
       { text: movie.Title, style: "header" },
-      //   blogsArray.map((blog) => {
-      // return [
-      // {
-      //   text: movie.Title
-      // },
+
       {
         text: `Year released: ${movie.Year}`
       }
-      // ]
-      //   })
     ],
     styles: {
       header: {
