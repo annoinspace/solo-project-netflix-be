@@ -20,6 +20,7 @@ const moviesRouter = express.Router()
 moviesRouter.get("/:movieId", async (req, res, next) => {
   try {
     const moviesArray = await getMovies()
+    console.log(req.params.movieId)
     const movie = moviesArray.find((movie) => movie.imdbID === req.params.movieId)
     if (movie) {
       res.status(200).send(movie)

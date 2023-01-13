@@ -5,7 +5,7 @@ import { join } from "path"
 import createHttpError from "http-errors"
 import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHandler } from "./errorHandlers.js"
 import moviesRouter from "./api/movies/index.js"
-import mediasRouter from "./api/medias/index.js"
+// import mediasRouter from "./api/medias/index.js"
 
 const server = express()
 const port = process.env.PORT
@@ -34,7 +34,7 @@ server.use(cors(corsOptions))
 // ----------------------------------endpoints
 
 server.use("/movies", moviesRouter)
-server.use("/medias", mediasRouter)
+// server.use("/medias", mediasRouter)
 // server.use("/third", thirdRouter)
 
 // ----------------------------------error handlers
