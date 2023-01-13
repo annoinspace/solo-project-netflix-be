@@ -1,2 +1,2 @@
 # solo-project-netflix-be
-Backend files for a previous frontend project
+Backend files for a previous netflix frontend project https://github.com/annoinspace/EPICODE-react-solo-project
