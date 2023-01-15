@@ -75,18 +75,23 @@ moviesRouter.get("/", async (req, res, next) => {
 })
 
 moviesRouter.post("/", async (req, res, next) => {
-  try {
-    const newMovie = {
-      imdbID: uniqid(),
-      ...req.body
+  if (req.body) {
+    try {
+      const newMovie = {
+        imdbID: uniqid(),
+        ...req.body
+      }
+      console.log(newMovie)
+      const moviesArray = await getMovies()
+      moviesArray.push(newMovie)
+      writeMovies(moviesArray)
+      res.status(201).send({ imdbID: newMovie.imdbID })
+    } catch (error) {
+      console.log("----error adding new movie-----")
+      next(BadRequest(`Unfortunately this movie was not created!`))
     }
-    const moviesArray = await getMovies()
-    moviesArray.push(newMovie)
-    writeMovies(moviesArray)
-    res.status(201).send({ imdbID: newMovie.imdbID })
-  } catch (error) {
-    console.log("----error adding new movie-----")
-    next(BadRequest(`Unfortunately this movie was not created!`))
+  } else {
+    console.log("cannot do put request yet")
   }
 })
 
