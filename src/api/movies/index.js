@@ -2,10 +2,21 @@ import express from "express"
 import httpErrors from "http-errors"
 import uniqid from "uniqid"
 import { pipeline } from "stream"
-import { getMovies, getMoviesJsonReadableStream, writeMovies } from "../../lib/fs-tools.js"
+import { getMovies, writeMovies } from "../../lib/fs-tools.js"
 import { getPDFReadableStream } from "../../lib/pdf-tools.js"
+import multer from "multer"
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
 
 const moviesRouter = express.Router()
+const cloudinaryUploader = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: "netflix-backend"
+    }
+  })
+}).single("Poster")
 
 // all movies
 // moviesRouter.get("/", async (req, res, next) => {
@@ -79,6 +90,7 @@ moviesRouter.post("/", async (req, res, next) => {
     try {
       const newMovie = {
         imdbID: uniqid(),
+        Type: "movie",
         ...req.body
       }
       console.log(newMovie)
@@ -92,6 +104,27 @@ moviesRouter.post("/", async (req, res, next) => {
     }
   } else {
     console.log("cannot do put request yet")
+  }
+})
+
+moviesRouter.post("/:movieId/poster", cloudinaryUploader, async (req, res, next) => {
+  try {
+    console.log(req.file)
+    const url = req.file.path
+
+    const moviesArray = await getMovies()
+    const index = moviesArray.findIndex((movie) => movie.imdbID === req.params.movieId)
+    //   updating the movie cover
+    if (index !== -1) {
+      const oldMovieInfo = moviesArray[index]
+
+      const updatedMovie = { ...oldMovieInfo, Poster: url }
+      moviesArray[index] = updatedMovie
+      await writeMovies(moviesArray)
+    }
+    res.send("movie image updated")
+  } catch (error) {
+    next(error)
   }
 })
 
