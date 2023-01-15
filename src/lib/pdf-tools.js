@@ -1,6 +1,6 @@
 import PdfPrinter from "pdfmake"
 
-export const getPDFReadableStream = (movie) => {
+export const getPDFReadableStream = async (movie) => {
   const fonts = {
     Roboto: {
       normal: "Helvetica"

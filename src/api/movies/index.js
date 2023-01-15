@@ -17,17 +17,21 @@ const moviesRouter = express.Router()
 //     next(error)
 //   }
 // })
+
 moviesRouter.get("/:movieId/pdf", async (req, res, next) => {
   try {
     const moviesArray = await getMovies()
     const movie = await moviesArray.find((movie) => movie.imdbID === req.params.movieId)
-    res.setHeader("Content-Disposition", `attachment; filename=${req.params.movieId}.pdf`)
-    const source = getPDFReadableStream(movie)
-    const destination = res
-    console.log("pdf created")
-    pipeline(source, destination, (err) => {
-      if (err) console.log(err)
-    })
+    if (movie) {
+      console.log(movie.Title)
+      res.setHeader("Content-Disposition", "attachment; filename=movie.pdf")
+      const source = await getPDFReadableStream(movie)
+      const destination = res
+      console.log("pdf created")
+      pipeline(source, destination, (err) => {
+        if (err) console.log(err)
+      })
+    }
   } catch (error) {
     next(error)
   }
