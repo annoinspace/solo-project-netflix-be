@@ -90,6 +90,7 @@ moviesRouter.post("/", async (req, res, next) => {
     try {
       const newMovie = {
         imdbID: uniqid(),
+        // Title: "req.body.Title",
         Type: "movie",
         ...req.body
       }

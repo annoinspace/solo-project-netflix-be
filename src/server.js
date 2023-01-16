@@ -28,8 +28,8 @@ const corsOptions = {
 }
 
 server.use(express.static(publicFolderPath))
-server.use(express.json())
 server.use(cors(corsOptions))
+server.use(express.json())
 
 // ----------------------------------endpoints
 

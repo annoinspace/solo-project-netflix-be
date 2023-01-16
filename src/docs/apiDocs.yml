@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: Epic Books API
+  description: We have books and users
+  version: 1.0.1
+servers:
+  - url: http://localhost:3001
+    variables: {}
+    description: Local server
+  - url: https://solo-project-netflix-be-production.up.railway.app
+    variables: {}
+    description: Cloud server
+tags:
+  - name: movies
+    description: movies operations
+paths:
+  /movies/{movieId}/poster:
+    post:
+      tags:
+        - movies
+      summary: uploads an image
+      description: ""
+      operationId: uploadFile
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of movie to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: additionalMetadata
+          in: query
+          description: Additional Metadata
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Movies"
+
+components:
+  responses:
+    NotFound:
+      description: The specific resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: Some problems with your request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    GenericServerError:
+      description: A problem on the server occurred
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    Movies:
+      type: object
+      properties:
+        movieId:
+          type: string
+        Title:
+          type: string
+        Poster:
+          type: string
+        Type:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: false
+        message:
+          type: string
