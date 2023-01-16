@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Epic Books API
-  description: We have books and users
+  description: netflix docs
   version: 1.0.1
 servers:
   - url: http://localhost:3001
