@@ -4,6 +4,7 @@ import uniqid from "uniqid"
 import { pipeline } from "stream"
 import { getMovies, writeMovies } from "../../lib/fs-tools.js"
 import { getPDFReadableStream } from "../../lib/pdf-tools.js"
+import { checkMovieSchema, triggerMovieBadRequest } from "../validator.js"
 import multer from "multer"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
@@ -85,7 +86,7 @@ moviesRouter.get("/", async (req, res, next) => {
   }
 })
 
-moviesRouter.post("/", async (req, res, next) => {
+moviesRouter.post("/", checkMovieSchema, triggerMovieBadRequest, async (req, res, next) => {
   if (req.body) {
     try {
       const newMovie = {
