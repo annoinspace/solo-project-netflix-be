@@ -14,13 +14,93 @@ tags:
   - name: medias
     description: medias operations
 paths:
+  /medias/:
+    post:
+      tags:
+        - medias
+      summary: Create a new media
+      description: Adds a new media
+      requestBody:
+        description: The body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Medias"
+      responses:
+        "201":
+          description: The ID of the newly created media
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/GenericServerError"
+  /medias/{mediaId}:
+    get:
+      tags:
+        - medias
+      summary: get media by Id
+      description: ""
+      operationId: getSingleMedia
+      parameters:
+        - name: mediaId
+          in: path
+          description: single media by Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Medias"
+    put:
+      tags:
+        - medias
+      description: Update an existing Media
+      summary: Update
+      parameters:
+        - in: path
+          name: mediaId
+          required: true
+          schema:
+            type: string
+          description: The ID of the Media to update
+      requestBody:
+        description: Fields to update
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Medias"
+      responses:
+        "200":
+          description: A list of media
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Medias"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/GenericServerError"
   /medias/{mediaId}/poster:
     post:
       tags:
         - medias
       summary: uploads an image
       description: ""
-      operationId: uploadFile
+      operationId: uploadPoster
       parameters:
         - name: mediaId
           in: path
@@ -48,7 +128,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Medias"
-
+  /medias/{mediaId}/pdf:
+    get:
+      tags:
+        - medias
+      summary: get media pdf
+      description: ""
+      operationId: getSingleMediaPdf
+      parameters:
+        - name: mediaId
+          in: path
+          description: single media poster by Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Medias"
 components:
   responses:
     NotFound:
