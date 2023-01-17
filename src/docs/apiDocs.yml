@@ -94,6 +94,25 @@ paths:
           $ref: "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/GenericServerError"
+    delete:
+      tags:
+        - medias
+      summary: Delete
+      description: Delete a specific Media by ID
+      parameters:
+        - in: path
+          name: mediaId
+          required: true
+          schema:
+            type: string
+          description: The ID of the Media to delete
+      responses:
+        "204":
+          description: Empty Response
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/GenericServerError"
   /medias/{mediaId}/poster:
     post:
       tags:
