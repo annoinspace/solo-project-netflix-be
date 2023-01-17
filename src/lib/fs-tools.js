@@ -4,12 +4,12 @@ import fs from "fs-extra"
 
 const { readJSON, writeJSON } = fs
 
-//for the movies
+//for the medias
 const dataFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../data")
-const moviesJSONPath = join(dataFolderPath, "movies.json")
+const mediasJSONPath = join(dataFolderPath, "medias.json")
 
-export const getMovies = () => readJSON(moviesJSONPath)
-export const writeMovies = (moviesArray) => writeJSON(moviesJSONPath, moviesArray)
+export const getMedias = () => readJSON(mediasJSONPath)
+export const writeMedias = (mediasArray) => writeJSON(mediasJSONPath, mediasArray)
 
-export const getMoviesJsonReadableStream = () => createReadStream(moviesJSONPath)
+export const getMediasJsonReadableStream = () => createReadStream(mediasJSONPath)
 export const getPDFWriteableStream = (filename) => createWriteStream(join(dataFolderPath, filename))

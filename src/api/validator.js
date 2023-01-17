@@ -1,6 +1,6 @@
 import { checkSchema, validationResult } from "express-validator"
 
-const movieSchema = {
+const mediaSchema = {
   Title: {
     in: ["body"],
     isString: {
@@ -15,9 +15,9 @@ const movieSchema = {
   }
 }
 
-export const checkMovieSchema = checkSchema(movieSchema)
+export const checkMediaSchema = checkSchema(mediaSchema)
 
-export const triggerMovieBadRequest = (req, res, next) => {
+export const triggerMediaBadRequest = (req, res, next) => {
   const errors = validationResult(req)
   console.log(errors.array())
 

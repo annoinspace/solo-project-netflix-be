@@ -6,7 +6,7 @@ import swagger from "swagger-ui-express"
 import yaml from "yamljs"
 import createHttpError from "http-errors"
 import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHandler } from "./errorHandlers.js"
-import moviesRouter from "./api/movies/index.js"
+import mediasRouter from "./api/medias/index.js"
 // import mediasRouter from "./api/medias/index.js"
 
 const server = express()
@@ -36,7 +36,7 @@ server.use(express.json())
 
 // ----------------------------------endpoints
 
-server.use("/movies", moviesRouter)
+server.use("/medias", mediasRouter)
 server.use("/docs", swagger.serve, swagger.setup(yamlFile))
 
 // ----------------------------------error handlers
